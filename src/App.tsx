@@ -1,24 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
 
-function App() {
+import { InputField, TodoList} from './components';
+import './App.css'
+import { Todo } from './interfaces/Todo';
+
+const App: React.FC = () => {
+  const [todo, setTodo] = useState<string>("");
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  const handleTodoAdd=(e: React.FormEvent)=>{
+    // prevents page from refreshing when submitting
+    e.preventDefault()
+
+    if(todo){
+      setTodos([...todos, {id: Date.now(), todo: todo, isDone: false}])
+      // empty input field
+      setTodo('')
+    }
+  }
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 className='Header'>Taskify</h1>
+      <InputField
+        todo={todo}
+        setTodo={setTodo}
+        handleTodoAdd={handleTodoAdd}
+      />
+
+      <TodoList todos={todos} setTodos={setTodos}/>
+    
     </div>
   );
 }
